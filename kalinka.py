@@ -12,6 +12,8 @@ EMPTY_OUT = 'ε'
 OR = '|'
 AND = ' '
 
+fmt = "fancy_grid"
+
 def grammar(g):
     
     G = OrderedDict()
@@ -212,24 +214,18 @@ def as_table(G, N, M = None, first = None, follow = None, **kwargs):
     return tabulate(data, headers=["NON -\nTERMINALS"] + z+["FIRST", "FOLLOW"], **kwargs)
 
 if __name__ == "__main__":
-    l = len(sys.argv) 
     
-    g = """
-        E -> T E'
-        E' -> + T E' | € 
-        T -> F T'
-        T' -> * F T' | €
-        F -> ( E ) | id
-        """
+    l = len(sys.argv) 
+
     if l >= 2:
         arg = sys.argv[1]
         if arg in ("--help", "-h"):
             print("Grammar Table Generator")
-            print("Usage: python script.py <grammar_file | grammar_string> [table_format]")
+            print("Usage: python kalinka.py <grammar_file | grammar_string> [table_format]")
             print("\nProvide a context-free grammar in Backus-Naur Form (BNF) either as a file or a string.")
             print("If using a file, provide the file path. If using a string, enclose it in double quotes.")
             print("Example:")
-            print("python script.py grammar.txt fancy_grid")
+            print("python kalinka.py grammar.txt fancy_grid")
             print("\nGrammar Format:")
             print("Non-terminals are on the left side of '->', terminals on the right.")
             print("Use space (' ') as a separator in productions. Separate productions with '|'.")
@@ -241,8 +237,6 @@ if __name__ == "__main__":
             print("                   latex_raw, latex_booktabs, textile")
             exit()
         elif os.path.isfile(arg):
-            fmt = "fancy_grid"
-
             with open(arg, "r") as file:
                 G, N = grammar(file.read())
                 if len(G) == 0:
